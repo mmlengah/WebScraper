@@ -1,6 +1,7 @@
+from abc import ABC, abstractmethod
 from playwright.async_api import async_playwright
 
-class AsyncBrightDataScraper:
+class AsyncBrightDataScraper(ABC):  # Inherits from ABC to enable abstract methods
     def __init__(self, credentials, country="gb"):
         auth = f"{credentials['username']}-country-{country}:{credentials['password']}"
         self.sbr_ws_cdp = f"wss://{auth}@{credentials['host']}"
@@ -18,5 +19,7 @@ class AsyncBrightDataScraper:
             finally:
                 await self.browser.close()
 
+    @abstractmethod
     async def process_page(self, url):
-        raise NotImplementedError("The process_page method must be overridden by a subclass.")
+        """Subclasses should implement this method to process the page after navigation."""
+        pass
